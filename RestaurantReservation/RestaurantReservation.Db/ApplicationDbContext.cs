@@ -1,10 +1,23 @@
 using Microsoft.EntityFrameworkCore;
+using RestaurantReservation.Db.Extensions;
+using RestaurantReservation.Db.Models.Entities;
 
 namespace RestaurantReservation.Db;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    public DbSet<Customer> Customers { get; set; }
+    public DbSet<Employee> Employees { get; set; }
+    public DbSet<MenuItem> MenuItems { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
+    public DbSet<Restaurant> Restaurants { get; set; }
+    public DbSet<Reservation> Reservations { get; set; }
+    public DbSet<Table> Tables { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        modelBuilder.Seed();
     }
 }
