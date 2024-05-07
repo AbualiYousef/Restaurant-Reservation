@@ -10,5 +10,5 @@ public class Employee
     public EmployeePosition Position { get; set; }
     public int? RestaurantId { get; set; }
     public Restaurant Restaurant { get; set; }
-    public List<Order> Orders { get; set; } = new List<Order>();
+    public ICollection<Order>? Orders { get; set; } = new List<Order>();
 }

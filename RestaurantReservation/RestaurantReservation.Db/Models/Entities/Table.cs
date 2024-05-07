@@ -6,5 +6,5 @@ public class Table
     public int Capacity { get; set; }
     public int? RestaurantId { get; set; }
     public Restaurant Restaurant { get; set; }
-    public List<Reservation> Reservations { get; set; } = new List<Reservation>();
+    public ICollection<Reservation>? Reservations { get; set; } = new List<Reservation>();
 }
