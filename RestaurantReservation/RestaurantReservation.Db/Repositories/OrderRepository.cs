@@ -15,4 +15,12 @@ public class OrderRepository(ApplicationDbContext context)
             .ThenInclude(oi => oi.MenuItem)
             .ToListAsync();
     }
+
+    public async Task<decimal> CalculateAverageOrderAmountAsync(int employeeId)
+    {
+        var avg = await context.Orders
+            .Where(o => o.EmployeeId == employeeId)
+            .AverageAsync(o => o.TotalAmount);
+        return avg;
+    }
 }
