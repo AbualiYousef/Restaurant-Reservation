@@ -345,7 +345,7 @@ public static class DataSeeding
                 Name = "Gourmet Hub",
                 Address = "1234 Culinary Blvd, Foodie Town",
                 PhoneNumber = "555-1234",
-                openingHours = "9:00 AM - 11:00 PM"
+                OpeningHours = "9:00 AM - 11:00 PM"
             },
             new Restaurant
             {
@@ -353,7 +353,7 @@ public static class DataSeeding
                 Name = "The Italian Corner",
                 Address = "5678 Pasta Lane, Little Italy",
                 PhoneNumber = "555-5678",
-                openingHours = "11:00 AM - 10:00 PM"
+                OpeningHours = "11:00 AM - 10:00 PM"
             },
             new Restaurant
             {
@@ -361,7 +361,7 @@ public static class DataSeeding
                 Name = "Sushi Sushi",
                 Address = "135 Sushi St, Downtown",
                 PhoneNumber = "555-1357",
-                openingHours = "12:00 PM - 10:00 PM"
+                OpeningHours = "12:00 PM - 10:00 PM"
             },
             new Restaurant
             {
@@ -369,7 +369,7 @@ public static class DataSeeding
                 Name = "Curry Leaf",
                 Address = "2468 Curry Ave, Spice City",
                 PhoneNumber = "555-2468",
-                openingHours = "10:00 AM - 9:00 PM"
+                OpeningHours = "10:00 AM - 9:00 PM"
             },
             new Restaurant
             {
@@ -377,7 +377,7 @@ public static class DataSeeding
                 Name = "The Burger Joint",
                 Address = "7890 Burger Blvd, Greasy Corner",
                 PhoneNumber = "555-7890",
-                openingHours = "10:00 AM - 12:00 AM"
+                OpeningHours = "10:00 AM - 12:00 AM"
             }
         };
     }
