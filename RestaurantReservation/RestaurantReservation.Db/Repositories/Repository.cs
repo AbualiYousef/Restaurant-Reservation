@@ -27,7 +27,7 @@ public class Repository<T>(ApplicationDbContext context, DbSet<T> dbSet) : IRepo
         return new PagedResult<T>(items, totalItemCount, pageNumber, pageSize);
     }
 
-    public async Task<T?> GetByIdAsync(Guid id)
+    public async Task<T?> GetByIdAsync(int id)
     {
         return await dbSet.FindAsync(id);
     }
