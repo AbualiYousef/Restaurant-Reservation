@@ -34,7 +34,7 @@ cd RestaurantReservation
 
 Below is the schema for the `RestaurantReservation` database:
 
-![Database Schema](images/database_schema.png)
+![Database Schema](Images/database_schema.png)
 
 
 ## Implementation Details
