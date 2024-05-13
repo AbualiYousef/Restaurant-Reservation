@@ -8,7 +8,7 @@ namespace RestaurantReservation.Db.Repositories;
 public class Repository<T>(ApplicationDbContext context, DbSet<T> dbSet) : IRepository<T>
     where T : class
 {
-    public async Task<PagedResult<T>> GetAllAsync(int pageNumber, int pageSize,
+    public async Task<PagedResult<T>> GetAllAsync(PaginationParameters paginationParameters,
         Expression<Func<T, bool>>? filter = null)
     {
         IQueryable<T> query = dbSet;
@@ -20,11 +20,12 @@ public class Repository<T>(ApplicationDbContext context, DbSet<T> dbSet) : IRepo
 
         var totalItemCount = await query.CountAsync();
         var items = await query
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
+            .Skip((paginationParameters.PageNumber - 1) * paginationParameters.PageSize)
+            .Take(paginationParameters.PageSize)
             .ToListAsync();
 
-        return new PagedResult<T>(items, totalItemCount, pageNumber, pageSize);
+        return new PagedResult<T>(items, totalItemCount, paginationParameters.PageNumber,
+            paginationParameters.PageSize);
     }
 
     public async Task<T?> GetByIdAsync(int id)
