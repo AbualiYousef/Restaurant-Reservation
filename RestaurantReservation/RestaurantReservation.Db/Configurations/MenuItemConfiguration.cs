@@ -22,7 +22,7 @@ public class MenuItemConfiguration : IEntityTypeConfiguration<MenuItem>
         builder.HasOne(e => e.Restaurant)
             .WithMany(e => e.MenuItems)
             .HasForeignKey(e => e.RestaurantId)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.NoAction);
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

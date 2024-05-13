@@ -12,12 +12,11 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
             .WithMany(c => c.Reservations)
             .HasForeignKey(r => r.CustomerId)
             .IsRequired()
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.SetNull);
         
         builder.HasOne(r => r.Table)
             .WithMany(t => t.Reservations)
             .HasForeignKey(r => r.TableId)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

@@ -18,6 +18,6 @@ public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
             .WithMany(mi => mi.OrderItems)
             .HasForeignKey(oi => oi.MenuItemId)
             .IsRequired()
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }
