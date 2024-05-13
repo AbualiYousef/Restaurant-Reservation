@@ -3,43 +3,30 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RestaurantReservation.Db;
-
+using RestaurantReservation.Db.Interfaces;
+using RestaurantReservation.Db.Repositories;
 
 static IHostBuilder CreateHostBuilder(string[] args)
 {
-    return Host.CreateDefaultBuilder()
-        .ConfigureServices(services =>
+    return Host.CreateDefaultBuilder(args)
+        .ConfigureServices((context, services) =>
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                {
-                    var configuration = new ConfigurationBuilder()
-                        .AddJsonFile("appsettings.json", false, true)
-                        .Build();
+            {
+                var configuration = context.Configuration;
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            });
 
-                    options
-                        .UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-                });
+            // Register repositories
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IReservationRepository, ReservationRepository>();
+            services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+            services.AddScoped<ITableRepository, TableRepository>();
         });
 }
 
 await CreateHostBuilder(args).Build().RunAsync();
-
-// Set up configuration sources
-// IConfiguration configuration = new ConfigurationBuilder()
-//     .SetBasePath(Directory.GetCurrentDirectory())
-//     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-//     .Build();
-
-// Retrieve the connection string from the configuration file
-// var connectionString = configuration.GetConnectionString("DefaultConnection");
-
-// if (string.IsNullOrEmpty(connectionString))
-// {
-//     throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-// }
-
-// Configure the service collection and add DbContext
-// var serviceProvider = new ServiceCollection()
-//     .AddDbContext<ApplicationDbContext>(options =>
-//         options.UseSqlServer(connectionString))
-//     .BuildServiceProvider();
