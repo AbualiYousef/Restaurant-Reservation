@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using RestaurantReservation.Db.Exceptions;
 using RestaurantReservation.Db.Extensions;
 using RestaurantReservation.Db.Models.Entities;
 using RestaurantReservation.Db.Models.Views;
@@ -28,25 +29,29 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<EmployeeDetails>().HasNoKey().ToView("View_EmployeesDetails");
         modelBuilder
             .HasDbFunction(typeof(ApplicationDbContext)
-                .GetMethod(nameof(CalculateRestaurantTotalRevenue), new[] { typeof(int) }))
+                .GetMethod(nameof(CalculateRestaurantTotalRevenue), new[] { typeof(int) })!)
             .HasName("fn_CalculateTotalRevenue");
     }
 
     public decimal CalculateRestaurantTotalRevenue(int restaurantId)
     {
         var restaurant = Restaurants
-            .Include(r => r.Reservations)
-            .ThenInclude(r => r.Orders)
+            .Include(r => r.Reservations)!
+            .ThenInclude(r => r.Orders)!
+            .ThenInclude(o => o.OrderItems)
+            .ThenInclude(oi => oi.MenuItem)
             .FirstOrDefault(r => r.Id == restaurantId);
+
         if (restaurant == null)
         {
-            throw new ArgumentException("Invalid restaurantId");
+            throw new EntityNotFoundException<Restaurant>($"Restaurant with id {restaurantId} not found.");
         }
 
         var totalRevenue = restaurant.Reservations!
             .SelectMany(r => r.Orders!)
             .SelectMany(o => o.OrderItems)
             .Sum(oi => oi.MenuItem.Price * oi.Quantity);
+
         return totalRevenue;
     }
 }

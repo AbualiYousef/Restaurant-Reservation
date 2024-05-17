@@ -5,7 +5,9 @@ using RestaurantReservation.Db.Models;
 
 namespace RestaurantReservation.Db.Repositories;
 
-public class Repository<T>(ApplicationDbContext context, DbSet<T> dbSet) : IRepository<T>
+public class Repository<T>(
+    ApplicationDbContext context,
+    DbSet<T> dbSet) : IRepository<T>
     where T : class
 {
     public async Task<PagedResult<T>> GetAllAsync(PaginationParameters paginationParameters,
@@ -35,18 +37,24 @@ public class Repository<T>(ApplicationDbContext context, DbSet<T> dbSet) : IRepo
 
     public async Task AddAsync(T entity)
     {
+        ArgumentNullException.ThrowIfNull(entity);
+
         await dbSet.AddAsync(entity);
         await context.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(T entity)
     {
+        ArgumentNullException.ThrowIfNull(entity);
+
         dbSet.Update(entity);
         await context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(T entity)
     {
+        ArgumentNullException.ThrowIfNull(entity);
+
         dbSet.Remove(entity);
         await context.SaveChangesAsync();
     }

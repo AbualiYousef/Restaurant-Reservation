@@ -5,41 +5,45 @@ using RestaurantReservation.Db.Models.Entities;
 using RestaurantReservation.Db.Models.Enums;
 using RestaurantReservation.Db.Models.Views;
 
-namespace RestaurantReservation.Db.Repositories;
-
-public class EmployeeRepository(ApplicationDbContext context)
-    : Repository<Employee>(context, context.Employees), IEmployeeRepository
+namespace RestaurantReservation.Db.Repositories
 {
-    public async Task<PagedResult<Employee>> ListManagersAsync(PaginationParameters paginationParameters)
+    public class EmployeeRepository(ApplicationDbContext context)
+        : Repository<Employee>(context, context.Employees), IEmployeeRepository
     {
-        var skip = (paginationParameters.PageNumber - 1) * paginationParameters.PageSize;
+        private readonly ApplicationDbContext _context = context ?? throw new ArgumentNullException(nameof(context));
 
-        var totalCount = await context.Employees
-            .Where(e => e.Position == EmployeePosition.Manager)
-            .CountAsync();
+        public async Task<PagedResult<Employee>> ListManagersAsync(PaginationParameters paginationParameters)
+        {
+            var skip = (paginationParameters.PageNumber - 1) * paginationParameters.PageSize;
 
-        var managers = await context.Employees
-            .Where(e => e.Position == EmployeePosition.Manager)
-            .Skip(skip)
-            .Take(paginationParameters.PageSize)
-            .ToListAsync();
+            var totalCount = await _context.Employees
+                .Where(e => e.Position == EmployeePosition.Manager)
+                .CountAsync();
 
-        return new PagedResult<Employee>(managers, totalCount, paginationParameters.PageNumber,
-            paginationParameters.PageSize);
-    }
+            var managers = await _context.Employees
+                .Where(e => e.Position == EmployeePosition.Manager)
+                .Skip(skip)
+                .Take(paginationParameters.PageSize)
+                .ToListAsync();
 
-    public async Task<PagedResult<EmployeeDetails>> GetEmployeesDetailsAsync(PaginationParameters paginationParameters)
-    {
-        var skip = (paginationParameters.PageNumber - 1) * paginationParameters.PageSize;
+            return new PagedResult<Employee>(managers, totalCount, paginationParameters.PageNumber,
+                paginationParameters.PageSize);
+        }
 
-        var totalCount = await context.EmployeesDetails.CountAsync();
+        public async Task<PagedResult<EmployeeDetails>> GetEmployeesDetailsAsync(
+            PaginationParameters paginationParameters)
+        {
+            var skip = (paginationParameters.PageNumber - 1) * paginationParameters.PageSize;
 
-        var employeesDetails = await context.EmployeesDetails
-            .Skip(skip)
-            .Take(paginationParameters.PageSize)
-            .ToListAsync();
+            var totalCount = await _context.EmployeesDetails.CountAsync();
 
-        return new PagedResult<EmployeeDetails>(employeesDetails, totalCount, paginationParameters.PageNumber,
-            paginationParameters.PageSize);
+            var employeesDetails = await _context.EmployeesDetails
+                .Skip(skip)
+                .Take(paginationParameters.PageSize)
+                .ToListAsync();
+
+            return new PagedResult<EmployeeDetails>(employeesDetails, totalCount, paginationParameters.PageNumber,
+                paginationParameters.PageSize);
+        }
     }
 }
