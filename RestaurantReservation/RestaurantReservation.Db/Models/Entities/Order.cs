@@ -9,5 +9,5 @@ public class Order
     public int? ReservationId { get; set; }
     public Employee Employee { get; set; }
     public Reservation Reservation { get; set; }
-    public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+    public List<OrderItem> OrderItems { get; set; } = new();
 }
